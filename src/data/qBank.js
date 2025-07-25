@@ -1,7 +1,5 @@
-// data/qBank.ts
-import { QuestionType } from "../types";
 
-export const qBank: QuestionType[] = [
+export const qBank = [
   {
     id: 1,
     question: "What is the capital of Haryana?",

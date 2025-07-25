@@ -1,17 +1,6 @@
-// components/Options.tsx
 import React from "react";
 
-type Props = {
-  options: string[];
-  selectedOption: string;
-  onOptionChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-};
-
-const Options: React.FC<Props> = ({
-  options,
-  selectedOption,
-  onOptionChange,
-}) => {
+const Options = ({ options, selectedOption, onOptionChange }) => {
   return (
     <div className="options">
       {options.map((opt, idx) => (

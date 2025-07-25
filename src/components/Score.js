@@ -1,13 +1,6 @@
-// components/Score.tsx
 import React from "react";
 
-type Props = {
-  score: number;
-  total: number;
-  onRestart: () => void;
-};
-
-const Score: React.FC<Props> = ({ score, total, onRestart }) => {
+const Score = ({ score, total, onRestart }) => {
   return (
     <div className="score-container">
       <h2>

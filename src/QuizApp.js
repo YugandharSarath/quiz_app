@@ -1,24 +1,22 @@
-// App.tsx – Quiz App (Functional with TypeScript)
 import React, { useState } from "react";
 import Question from "./components/Question";
 import Score from "./components/Score";
 import { qBank } from "./data/qBank";
 import "./styles.css";
 
-const App: React.FC = () => {
+export default function QuizApp() {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [selectedOption, setSelectedOption] = useState("");
   const [score, setScore] = useState(0);
   const [quizEnd, setQuizEnd] = useState(false);
 
-  const handleOptionChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleOptionChange = (e) => {
     setSelectedOption(e.target.value);
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
     const current = qBank[currentQuestionIndex];
-    // Prevent advancing if no option is selected
     if (!selectedOption) return;
     if (selectedOption === current.answer) {
       setScore(score + 1);
@@ -53,6 +51,4 @@ const App: React.FC = () => {
       )}
     </div>
   );
-};
-
-export default App;
+}

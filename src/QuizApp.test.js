@@ -6,11 +6,9 @@ import '@testing-library/jest-dom';
 
 // Helper to answer all questions correctly
 function answerAllQuestionsCorrectly() {
-  qBank.forEach((q, idx) => {
-    // Select the correct option
+  qBank.forEach((q) => {
     const option = screen.getByLabelText(q.answer);
     fireEvent.click(option);
-    // Submit the answer
     const submitBtn = screen.getByRole('button', { name: /submit/i });
     fireEvent.click(submitBtn);
   });
@@ -21,7 +19,7 @@ describe('Quiz App', () => {
     render(<App />);
     expect(screen.getByText(/quiz app/i)).toBeInTheDocument();
     expect(screen.getByText(qBank[0].question)).toBeInTheDocument();
-    qBank[0].options.forEach(opt => {
+    qBank[0].options.forEach((opt) => {
       expect(screen.getByLabelText(opt)).toBeInTheDocument();
     });
     expect(screen.getByRole('button', { name: /submit/i })).toBeInTheDocument();
@@ -32,27 +30,26 @@ describe('Quiz App', () => {
     const option = screen.getByLabelText(qBank[0].options[0]);
     fireEvent.click(option);
     fireEvent.click(screen.getByRole('button', { name: /submit/i }));
-    // Should show next question
     expect(screen.getByText(qBank[1].question)).toBeInTheDocument();
   });
 
   test('score increases for correct answers', () => {
     render(<App />);
-    // Answer first question correctly
-    const correctOption = screen.getByLabelText(qBank[0].answer);
-    fireEvent.click(correctOption);
+    fireEvent.click(screen.getByLabelText(qBank[0].answer));
     fireEvent.click(screen.getByRole('button', { name: /submit/i }));
-    // Answer second question incorrectly
-    const wrongOption = screen.getByLabelText(qBank[1].options.find(opt => opt !== qBank[1].answer)!);
-    fireEvent.click(wrongOption);
+
+    const wrongOption = qBank[1].options.find((opt) => opt !== qBank[1].answer);
+    fireEvent.click(screen.getByLabelText(wrongOption));
     fireEvent.click(screen.getByRole('button', { name: /submit/i }));
-    // Answer remaining questions correctly
+
     for (let i = 2; i < qBank.length; i++) {
       fireEvent.click(screen.getByLabelText(qBank[i].answer));
       fireEvent.click(screen.getByRole('button', { name: /submit/i }));
     }
-    // Score should be qBank.length - 1
-    expect(screen.getByText(new RegExp(`your score: ${qBank.length - 1} / ${qBank.length}`, 'i'))).toBeInTheDocument();
+
+    expect(
+      screen.getByText(new RegExp(`your score: ${qBank.length - 1} / ${qBank.length}`, 'i'))
+    ).toBeInTheDocument();
   });
 
   test('shows final score and restart button after last question', () => {
@@ -66,18 +63,17 @@ describe('Quiz App', () => {
     render(<App />);
     answerAllQuestionsCorrectly();
     fireEvent.click(screen.getByRole('button', { name: /play again/i }));
-    // Should show first question again
     expect(screen.getByText(qBank[0].question)).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /submit/i })).toBeInTheDocument();
   });
 
   test('radio buttons reflect selected option', () => {
     render(<App />);
-    const option = screen.getByLabelText(qBank[0].options[2]);
-    fireEvent.click(option);
-    expect(option).toBeChecked();
-    // Other options should not be checked
-    qBank[0].options.forEach((opt, idx) => {
+    const selectedOption = screen.getByLabelText(qBank[0].options[2]);
+    fireEvent.click(selectedOption);
+    expect(selectedOption).toBeChecked();
+
+    qBank[0].options.forEach((opt) => {
       if (opt !== qBank[0].options[2]) {
         expect(screen.getByLabelText(opt)).not.toBeChecked();
       }
@@ -86,9 +82,7 @@ describe('Quiz App', () => {
 
   test('cannot submit without selecting an option', () => {
     render(<App />);
-    // Try to submit without selecting
     fireEvent.click(screen.getByRole('button', { name: /submit/i }));
-    // Should stay on the same question
     expect(screen.getByText(qBank[0].question)).toBeInTheDocument();
   });
-}); 
+});
